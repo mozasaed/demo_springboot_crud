@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public interface UserApi {
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity addUser(@ModelAttribute UserReqDto userReqDto );
+    public ResponseEntity addUser(@RequestBody UserReqDto userReqDto );
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity getUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size);

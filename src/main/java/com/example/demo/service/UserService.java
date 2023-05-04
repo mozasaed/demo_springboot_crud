@@ -6,6 +6,7 @@ import com.example.demo.model.User;
 import com.example.demo.repo.UserRepo;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,14 +19,22 @@ import java.util.*;
 @Service
 @Data
 public class UserService {
-    private final ModelMapper modelMapper;
-    private final UserRepo userRepository;
+    private ModelMapper modelMapper;
+    @Autowired
+    private UserRepo userRepository;
 
     public UserService(ModelMapper modelMapper, UserRepo userRepository){
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
     }
     public Boolean add (UserReqDto userReqDto) {
+//        User u = new User();
+//        u.setAddress(userReqDto.getAddress());
+//        u.setEmail(userReqDto.getEmail());
+//        u.setPhone(userReqDto.getPhone());
+//        u.setFirstName(userReqDto.getFirstName());
+//        u.setLastName(userReqDto.getLastName());
+//        userRepository.save(u);
         User users = modelMapper.map(userReqDto, User.class);
         userRepository.save(users);
 
