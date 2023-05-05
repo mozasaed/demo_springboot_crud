@@ -20,11 +20,14 @@ public class UserController implements UserApi {
         return ResponseEntity.ok().body(userService.getAll(page, size));
     }
 
-    public ResponseEntity getUserById(String id) {
+    public ResponseEntity getUserById(Integer id) {
 
         return ResponseEntity.ok().body(userService.getById(id));
     }
-    public ResponseEntity editUser(String id, UserReqDto userReqDto) {
+    public ResponseEntity editUser(Integer id, UserReqDto userReqDto) {
         return ResponseEntity.ok().body(userService.edit(id, userReqDto));
+    }
+    public ResponseEntity deleteUser(Integer id) {
+        return ResponseEntity.ok().body(userService.delete(id));
     }
 }

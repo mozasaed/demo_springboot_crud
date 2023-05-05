@@ -52,27 +52,38 @@ public class UserService {
         }
         return list;
     }
-    public UserRespDto getById(String userId){
-        Optional<User> u = userRepository.findById(Integer.valueOf(userId));
+    public UserRespDto getById(Integer userId){
+        Optional<User> u = userRepository.findById(userId);
         if(!u.isPresent()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,userId+"  "+"doesn't exist");
         }
         return modelMapper.map(u.get(), UserRespDto.class);
     }
-    public ResponseEntity edit(String userId, UserReqDto userReqDto){
-        Optional<User> s = userRepository.findById(Integer.valueOf(userId));
+    public ResponseEntity edit(Integer userId, UserReqDto userReqDto){
+        Optional<User> s = userRepository.findById(userId);
 
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         if(s.isPresent()){
             User users = modelMapper.map(userReqDto, User.class);
-            users.setUserId(Integer.parseInt(userId));
+            users.setUserId(userId);
             userRepository.save(users);
         }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,userId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         Map response=new HashMap();
         response.put("response",Boolean.TRUE);
         return  ResponseEntity.ok().body(response);
 
+    }
+    public ResponseEntity delete(Integer userId){
+        Optional<User> s = userRepository.findById(userId);
+        if(s.isPresent()){
+            userRepository.deleteById(userId);
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        Map response=new HashMap();
+        response.put("response",Boolean.TRUE);
+        return  ResponseEntity.ok().body(response);
     }
 }
