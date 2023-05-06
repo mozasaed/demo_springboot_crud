@@ -1,9 +1,6 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -17,4 +14,8 @@ public class User {
     private String email;
     private String phone;
     private String address;
+
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "roleId", referencedColumnName = "roleId")
+    private Role role;
 }

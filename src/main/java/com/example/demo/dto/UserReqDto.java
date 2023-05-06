@@ -9,4 +9,5 @@ public class UserReqDto {
     private String email;
     private String phone;
     private String address;
+    private int roleId;
 }

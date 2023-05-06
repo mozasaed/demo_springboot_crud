@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.dto.UserReqDto;
 import com.example.demo.dto.UserRespDto;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
+import com.example.demo.repo.RoleRepo;
 import com.example.demo.repo.UserRepo;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
@@ -22,20 +24,21 @@ public class UserService {
     private ModelMapper modelMapper;
     @Autowired
     private UserRepo userRepository;
+    private final RoleRepo roleRepository;
 
-    public UserService(ModelMapper modelMapper, UserRepo userRepository){
+    public UserService(ModelMapper modelMapper, UserRepo userRepository, RoleRepo roleRepository){
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
     public Boolean add (UserReqDto userReqDto) {
-//        User u = new User();
-//        u.setAddress(userReqDto.getAddress());
-//        u.setEmail(userReqDto.getEmail());
-//        u.setPhone(userReqDto.getPhone());
-//        u.setFirstName(userReqDto.getFirstName());
-//        u.setLastName(userReqDto.getLastName());
-//        userRepository.save(u);
+        Optional<Role> r = roleRepository.findById(userReqDto.getRoleId());
+        if (!r.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Role with id" + " " + userReqDto.getRoleId() + " " + "doesn't exist");
+        }
         User users = modelMapper.map(userReqDto, User.class);
+        Role role = r.get();
+        users.setRole(role);
         userRepository.save(users);
 
         Map response = new HashMap();
