@@ -11,4 +11,6 @@ public class UserRespDto {
     private String phone;
     private String address;
     private int roleId;
+
+    private String password;
 }

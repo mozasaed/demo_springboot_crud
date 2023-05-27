@@ -15,6 +15,8 @@ public class User {
     private String phone;
     private String address;
 
+    private String password;
+
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "roleId", referencedColumnName = "roleId")
     private Role role;

@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,7 +26,8 @@ public class UserService {
     @Autowired
     private UserRepo userRepository;
     private final RoleRepo roleRepository;
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
     public UserService(ModelMapper modelMapper, UserRepo userRepository, RoleRepo roleRepository){
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
@@ -37,8 +39,10 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Role with id" + " " + userReqDto.getRoleId() + " " + "doesn't exist");
         }
         User users = modelMapper.map(userReqDto, User.class);
+        String encPsd = this.passwordEncoder.encode(userReqDto.getPassword());
         Role role = r.get();
         users.setRole(role);
+        users.setPassword(encPsd);
         userRepository.save(users);
 
         Map response = new HashMap();
