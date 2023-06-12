@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.controller.api.UserApi;
+import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.UserReqDto;
 import com.example.demo.service.UserService;
 import lombok.Data;
@@ -29,5 +30,10 @@ public class UserController implements UserApi {
     }
     public ResponseEntity deleteUser(Integer id) {
         return ResponseEntity.ok().body(userService.delete(id));
+    }
+
+    public ResponseEntity login(LoginDto loginDto) {
+        return ResponseEntity.ok().body(userService.doLogin(loginDto));
+
     }
 }

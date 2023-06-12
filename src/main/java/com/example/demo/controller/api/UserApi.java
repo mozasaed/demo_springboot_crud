@@ -1,5 +1,6 @@
 package com.example.demo.controller.api;
 
+import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.UserReqDto;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public interface UserApi {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity addUser(@RequestBody UserReqDto userReqDto );
+
+    @RequestMapping(value = "/auth/", method = RequestMethod.POST)
+    public ResponseEntity login(@RequestBody LoginDto loginDto );
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity getUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size);

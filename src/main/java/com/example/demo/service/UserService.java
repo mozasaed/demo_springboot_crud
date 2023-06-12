@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.UserReqDto;
 import com.example.demo.dto.UserRespDto;
 import com.example.demo.model.Role;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -92,5 +94,28 @@ public class UserService {
         Map response=new HashMap();
         response.put("response",Boolean.TRUE);
         return  ResponseEntity.ok().body(response);
+    }
+    public UserRespDto doLogin(LoginDto loginDto){
+
+        String rawPassword = loginDto.getPassword();
+        String encodedPassword = userRepository.findPasswordByUserName(loginDto.getUserName());
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        boolean passwordMatches = encoder.matches(rawPassword, encodedPassword);
+        Optional<User> u = userRepository.findByUserName(loginDto.getUserName());
+        if(!u.isPresent()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        Map response = new HashMap();
+        if(passwordMatches){
+            response.put("response",Boolean.TRUE);
+
+        }else{
+            response.put("response",Boolean.FALSE);
+        }
+        return modelMapper.map(u.get(), UserRespDto.class);
+
+
     }
 }
